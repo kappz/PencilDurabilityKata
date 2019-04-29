@@ -39,7 +39,7 @@ namespace PencilDurabilityKataTests
 
         // Pencil Durability Changes by -2 for capital letter.
         [TestMethod]
-        public void PencilDegradation()
+        public void PencilDegradationByTwo()
         {
             WriterActions writer = new WriterActions();
             string currentInput = "She sells sea shells";
@@ -47,6 +47,18 @@ namespace PencilDurabilityKataTests
             writer.ProcessInput(currentInput);
 
             Assert.AreEqual(982, writer.items.writersPencil.getDurability());
+        }
+
+        // Pencil Durability Changes by -1 for lowercase letter.
+        [TestMethod]
+        public void PencilDegradationByOne()
+        {
+            WriterActions writer = new WriterActions();
+            string currentInput = "she sells sea shells down by the sea shore";
+
+            writer.ProcessInput(currentInput);
+
+            Assert.AreEqual(966, writer.items.writersPencil.getDurability());
         }
     }
 }
