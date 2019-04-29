@@ -9,23 +9,35 @@ namespace PencilDurabilityKataTests
     [TestClass]
     public class UnitTests
     {
-        WriterActions writer;
 
-        [TestInitialize]
-        public void Setup()
-        {
-            writer = new WriterActions();
-        }
-
-        // Verify Write Functionality
+        // Test write functionality
+        //Write words to paper where character count = 0
         [TestMethod]
         public void InitialWordWritten()
         {
-            string testInput = "How"; 
-            writer.items.writersPencil.charactersToWrite = testInput;
-            writer.items.paper += writer.items.writersPencil.charactersToWrite;
+            WriterActions writer = new WriterActions();
+            string currentInput = "How";
+            writer.wordsToWrite(currentInput);
+            writer.AddToPaper();
 
-            Assert.AreEqual(testInput, writer.items.paper);
+            Assert.AreEqual(currentInput, writer.items.paper);
+        }
+
+        // Write words to paper where character count > 0
+        [TestMethod]
+        public void AddingToPaper()
+        {
+            WriterActions writer = new WriterActions();
+            string currentInput = "How";
+            string expectedPaper = "How much wood would a woodchuck chuck if a woodchuck could chuck wood?";
+
+            writer.wordsToWrite(currentInput);
+            writer.AddToPaper();
+            currentInput = " much wood would a woodchuck chuck if a woodchuck could chuck wood?";
+            writer.wordsToWrite(currentInput);
+            writer.AddToPaper();
+
+            Assert.AreEqual(expectedPaper, writer.items.paper);
         }
     }
 }

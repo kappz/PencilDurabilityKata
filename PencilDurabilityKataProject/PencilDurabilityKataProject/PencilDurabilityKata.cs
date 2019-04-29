@@ -24,6 +24,16 @@ namespace PencilDurabilityKataProject
         {
             items = new WriterTools();
         }
+
+        public void wordsToWrite(string words)
+        {
+            items.writersPencil.charactersToWrite = words;
+        }
+
+        public void AddToPaper()
+        {
+            items.paper += items.writersPencil.charactersToWrite;
+        }
     }
 
     public class Pencil
