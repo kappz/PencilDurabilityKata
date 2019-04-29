@@ -10,20 +10,19 @@ namespace PencilDurabilityKataTests
     public class UnitTests
     {
 
-        // Test write functionality
-        //Write words to paper where character count = 0
+        // Test write functionality.
+        //Write words to paper where character count = 0.
         [TestMethod]
         public void InitialWordWritten()
         {
             WriterActions writer = new WriterActions();
             string currentInput = "How";
-            writer.wordsToWrite(currentInput);
-            writer.AddToPaper();
-
-            Assert.AreEqual(currentInput, writer.items.paper);
+            writer.ProcessInput(currentInput);
+        
+            Assert.AreEqual(currentInput, string.Join(null, writer.items.paper.ToArray()));
         }
 
-        // Write words to paper where character count > 0
+        // Two writes to paper test.
         [TestMethod]
         public void AddingToPaper()
         {
@@ -31,13 +30,23 @@ namespace PencilDurabilityKataTests
             string currentInput = "How";
             string expectedPaper = "How much wood would a woodchuck chuck if a woodchuck could chuck wood?";
 
-            writer.wordsToWrite(currentInput);
-            writer.AddToPaper();
+            writer.ProcessInput(currentInput);
             currentInput = " much wood would a woodchuck chuck if a woodchuck could chuck wood?";
-            writer.wordsToWrite(currentInput);
-            writer.AddToPaper();
+            writer.ProcessInput(currentInput);
 
-            Assert.AreEqual(expectedPaper, writer.items.paper);
+            Assert.AreEqual(expectedPaper, string.Join(null, writer.items.paper.ToArray()));
+        }
+
+        // Pencil Durability Changes by -2 for capital letter.
+        [TestMethod]
+        public void PencilDegradation()
+        {
+            WriterActions writer = new WriterActions();
+            string currentInput = "She sells sea shells";
+        
+            writer.ProcessInput(currentInput);
+
+            Assert.AreEqual(982, writer.items.writersPencil.getDurability());
         }
     }
 }
