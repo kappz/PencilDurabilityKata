@@ -37,7 +37,7 @@ namespace PencilDurabilityKataTests
             Assert.AreEqual(expectedPaper, string.Join(null, writer.items.paper.ToArray()));
         }
 
-        // Pencil Durability Changes by -2 for capital letter.
+        // Pencil Durability decreases by -2 for capital letter.
         [TestMethod]
         public void PencilDegradationByTwo()
         {
@@ -49,7 +49,7 @@ namespace PencilDurabilityKataTests
             Assert.AreEqual(982, writer.items.writersPencil.getDurability());
         }
 
-        // Pencil Durability Changes by -1 for lowercase letter.
+        // Pencil Durability decreases by -1 for lowercase letter.
         [TestMethod]
         public void PencilDegradationByOne()
         {
@@ -59,6 +59,18 @@ namespace PencilDurabilityKataTests
             writer.ProcessInput(currentInput);
 
             Assert.AreEqual(966, writer.items.writersPencil.getDurability());
+        }
+
+        // Pencil Durability decreases by 0 for space or newline.
+        [TestMethod]
+        public void PencilDegradationByZero()
+        {
+            WriterActions writer = new WriterActions();
+            string currentInput = "shesellsseashells\r\n";
+
+            writer.ProcessInput(currentInput);
+
+            Assert.AreEqual(983, writer.items.writersPencil.getDurability());
         }
     }
 }
