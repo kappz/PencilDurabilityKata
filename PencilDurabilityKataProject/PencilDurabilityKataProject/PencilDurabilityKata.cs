@@ -18,7 +18,7 @@ namespace PencilDurabilityKataProject
         {
             foreach (char character in words)
             {
-                if (items.writersPencil.GetDurability() > 0)
+                if (items.writersPencil.GetCurrentDurability() > 0)
                 {
                     items.paper.Add(character);
                     items.writersPencil.UpdatePencilDurability(character);
@@ -29,6 +29,12 @@ namespace PencilDurabilityKataProject
                 }
                 
             }
+        }
+
+        //Sharpen Pencil back to full durability.
+        public void SharpenPencil()
+        {
+            items.writersPencil.SetDurability(items.writersPencil.GetInitialDurability());
         }
     }
   
@@ -46,23 +52,31 @@ namespace PencilDurabilityKataProject
 
     public class Pencil
     {
-        int durability;
+        int initialDurability;
+        int currentDurability;
         string charactersToWrite;
 
-        public Pencil(int initialDurability)
+        public Pencil(int durability)
         {
-            durability = initialDurability;
+            initialDurability = durability;
+            currentDurability = initialDurability;
             charactersToWrite = "";
         }
 
-        public int GetDurability()
+        public int GetCurrentDurability()
         {
-            return durability;
+            return currentDurability;
         }
 
-        public void SetDurability(int initialDurability)
+        public int GetInitialDurability()
         {
-            durability = initialDurability;
+            return initialDurability;
+        }
+
+        public void SetDurability(int durability)
+        {
+            initialDurability = durability;
+            currentDurability = durability;
         }
 
         // Computes point durability based off given point degrading values.
@@ -70,15 +84,15 @@ namespace PencilDurabilityKataProject
         {
             if (Char.IsUpper(currentCharacter))
             {
-                durability -= 2;
+                currentDurability -= 2;
             }
             else if (currentCharacter == ' ' && currentCharacter == '\r' && currentCharacter == '\n')
             {
-                durability -= 0;
+                currentDurability -= 0;
             }
             else if (currentCharacter != ' ' && currentCharacter != '\r' && currentCharacter != '\n')
             {
-                durability -= 1;
+                currentDurability -= 1;
             }
         }
     }

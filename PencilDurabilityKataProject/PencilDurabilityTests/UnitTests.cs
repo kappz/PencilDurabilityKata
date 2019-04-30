@@ -55,10 +55,10 @@ namespace PencilDurabilityKataTests
         {
             WriterActions writer = new WriterActions();
             string currentInput = "She sells sea shells";
-        
+
             writer.ProcessInput(currentInput);
 
-            Assert.AreEqual(982, writer.items.writersPencil.GetDurability());
+            Assert.AreEqual(982, writer.items.writersPencil.GetCurrentDurability());
         }
 
         // Pencil Durability decreases by -1 when writing lowercase letter.
@@ -70,7 +70,7 @@ namespace PencilDurabilityKataTests
 
             writer.ProcessInput(currentInput);
 
-            Assert.AreEqual(966, writer.items.writersPencil.GetDurability());
+            Assert.AreEqual(966, writer.items.writersPencil.GetCurrentDurability());
         }
 
         // Pencil Durability decreases by 0 when writing space or newline.
@@ -82,7 +82,19 @@ namespace PencilDurabilityKataTests
 
             writer.ProcessInput(currentInput);
 
-            Assert.AreEqual(983, writer.items.writersPencil.GetDurability());
+            Assert.AreEqual(983, writer.items.writersPencil.GetCurrentDurability());
+        }
+
+        // Writer sharpens pencil
+        [TestMethod]
+        public void WriterSharpensPencil()
+        {
+            WriterActions writer = new WriterActions();
+
+            writer.ProcessInput("Hello world");
+            writer.SharpenPencil();
+
+            Assert.AreEqual(1000, writer.items.writersPencil.GetCurrentDurability());
         }
     }
 }
