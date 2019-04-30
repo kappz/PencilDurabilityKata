@@ -145,5 +145,27 @@ namespace PencilDurabilityKataTests
 
             Assert.AreEqual("how       ood would.", string.Join(null, writer.items.paper.ToArray()));
         }
+
+        // Erases no text
+        [TestMethod]
+        public void EraseNoText()
+        {
+            WriterActions writer = new WriterActions();
+            writer.ProcessInput("how much wood would.");
+            writer.Erase("");
+
+            Assert.AreEqual(2000, writer.items.writersPencil.GetCurrentEraserDurability());
+
+        }
+        // Eraser Durability Decreases
+        [TestMethod]
+        public void EraserDegrades()
+        {
+            WriterActions writer = new WriterActions();
+            writer.ProcessInput("how much wood would.");
+            writer.Erase("much w");
+
+            Assert.AreEqual(1994, writer.items.writersPencil.GetCurrentEraserDurability());
+        }
     }
 }

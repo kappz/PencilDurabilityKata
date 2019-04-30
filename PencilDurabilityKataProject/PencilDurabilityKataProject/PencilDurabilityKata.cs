@@ -46,9 +46,13 @@ namespace PencilDurabilityKataProject
             string paper = string.Join(null, items.paper.ToArray());
 
             matchIndex = paper.LastIndexOf(eraseText);
-            for (int i = matchIndex; i <  matchIndex + textLength; ++i)
+            if (matchIndex != -1)
             {
-                items.paper[i] = ' ';
+                for (int i = matchIndex; i < matchIndex + textLength; ++i)
+                {
+                    items.paper[i] = ' ';
+                }
+                items.writersPencil.DecreaseEraserDurability(textLength);
             }
         }
     }
@@ -61,7 +65,7 @@ namespace PencilDurabilityKataProject
         public WriterTools()
         {
             paper = new List<char>();
-            writersPencil = new Pencil(1000, 20);
+            writersPencil = new Pencil(1000, 2000, 20);
         }
     }
 
@@ -69,24 +73,29 @@ namespace PencilDurabilityKataProject
     {
         int initialDurability;
         int currentDurability;
+        int initialEraserDurability;
+        int currentEraserDurability;
         int length;
 
 
-        public Pencil(int durability, int l)
+        public Pencil(int durability, int eraserDurability, int l)
         {
             length = l;
             initialDurability = durability;
-            currentDurability = initialDurability;
-        }
-
-        public int GetCurrentDurability()
-        {
-            return currentDurability;
+            currentDurability = durability;
+            initialEraserDurability = eraserDurability;
+            currentEraserDurability = eraserDurability;
         }
 
         public int GetInitialDurability()
         {
             return initialDurability;
+        }
+
+
+        public int GetCurrentDurability()
+        {
+            return currentDurability;
         }
 
         public void SetDurability(int durability)
@@ -108,6 +117,21 @@ namespace PencilDurabilityKataProject
         public void DecreaseLength()
         {
             --length;
+        }
+
+        public int GetInitialEraserDurability()
+        {
+            return initialEraserDurability;
+        }
+
+        public int GetCurrentEraserDurability()
+        {
+            return currentEraserDurability;
+        }
+
+        public void DecreaseEraserDurability(int amount)
+        {
+            currentEraserDurability -= amount;
         }
 
         // Computes point durability based off given point degrading values.
