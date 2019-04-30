@@ -13,14 +13,15 @@ namespace PencilDurabilityKataProject
             items = new WriterTools();
         }
 
+        // Add characters or words to paper
         public void ProcessInput(string words)
         {
             foreach (char character in words)
             {
-                if (items.writersPencil.getDurability() > 0)
+                if (items.writersPencil.GetDurability() > 0)
                 {
                     items.paper.Add(character);
-                    pencilDurability(character);
+                    items.writersPencil.UpdatePencilDurability(character);
                 }
                 else
                 {
@@ -29,24 +30,8 @@ namespace PencilDurabilityKataProject
                 
             }
         }
-
-        public void pencilDurability(char currentCharacter)
-        {
-            if (Char.IsUpper(currentCharacter))
-            {
-                items.writersPencil.changeDurability(-2);
-            }
-            else if (currentCharacter == ' ' && currentCharacter == '\r' && currentCharacter == '\n')
-            {
-                items.writersPencil.changeDurability(0);
-            }
-            else if (currentCharacter != ' ' && currentCharacter != '\r' && currentCharacter != '\n')
-            {
-                items.writersPencil.changeDurability(-1);
-            }
-        }
     }
-
+  
     public class WriterTools
     {
         public List<char> paper;
@@ -62,8 +47,7 @@ namespace PencilDurabilityKataProject
     public class Pencil
     {
         int durability;
-
-        public string charactersToWrite;
+        string charactersToWrite;
 
         public Pencil(int initialDurability)
         {
@@ -71,13 +55,31 @@ namespace PencilDurabilityKataProject
             charactersToWrite = "";
         }
 
-        public int getDurability()
+        public int GetDurability()
         {
             return durability;
         }
-        public void changeDurability(int num)
+
+        public void SetDurability(int initialDurability)
         {
-            durability += num;
+            durability = initialDurability;
+        }
+
+        // Computes point durability based off given point degrading values.
+        public void UpdatePencilDurability(char currentCharacter)
+        {
+            if (Char.IsUpper(currentCharacter))
+            {
+                durability -= 2;
+            }
+            else if (currentCharacter == ' ' && currentCharacter == '\r' && currentCharacter == '\n')
+            {
+                durability -= 0;
+            }
+            else if (currentCharacter != ' ' && currentCharacter != '\r' && currentCharacter != '\n')
+            {
+                durability -= 1;
+            }
         }
     }
 }

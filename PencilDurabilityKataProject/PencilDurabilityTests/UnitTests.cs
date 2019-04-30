@@ -9,8 +9,6 @@ namespace PencilDurabilityKataTests
     [TestClass]
     public class UnitTests
     {
-
-        // Test write functionality.
         //Write words to paper where character count = 0.
         [TestMethod]
         public void InitialWordWritten()
@@ -18,7 +16,7 @@ namespace PencilDurabilityKataTests
             WriterActions writer = new WriterActions();
             string currentInput = "How";
             writer.ProcessInput(currentInput);
-        
+
             Assert.AreEqual(currentInput, string.Join(null, writer.items.paper.ToArray()));
         }
 
@@ -28,16 +26,30 @@ namespace PencilDurabilityKataTests
         {
             WriterActions writer = new WriterActions();
             string currentInput = "How";
-            string expectedPaper = "How much wood would a woodchuck chuck if a woodchuck could chuck wood?";
+            string expectedOutput = "How much wood would a woodchuck chuck if a woodchuck could chuck wood?";
 
             writer.ProcessInput(currentInput);
             currentInput = " much wood would a woodchuck chuck if a woodchuck could chuck wood?";
             writer.ProcessInput(currentInput);
 
-            Assert.AreEqual(expectedPaper, string.Join(null, writer.items.paper.ToArray()));
+            Assert.AreEqual(expectedOutput, string.Join(null, writer.items.paper.ToArray()));
         }
 
-        // Pencil Durability decreases by -2 for capital letter.
+        //Pencil prints white space when writing with a dull pencil.
+        [TestMethod]
+        public void PrintsWhiteSpaceWhenDull()
+        {
+            WriterActions writer = new WriterActions();
+            string currentInput = "How much wood would";
+            string expectedOutput = "How much wood w    ";
+
+            writer.items.writersPencil.SetDurability(13);
+            writer.ProcessInput(currentInput);
+
+            Assert.AreEqual(expectedOutput, String.Join(null, writer.items.paper.ToArray()));
+        }
+
+        // Pencil Durability decreases by -2 when writing capital letter.
         [TestMethod]
         public void PencilDegradationByTwo()
         {
@@ -46,10 +58,10 @@ namespace PencilDurabilityKataTests
         
             writer.ProcessInput(currentInput);
 
-            Assert.AreEqual(982, writer.items.writersPencil.getDurability());
+            Assert.AreEqual(982, writer.items.writersPencil.GetDurability());
         }
 
-        // Pencil Durability decreases by -1 for lowercase letter.
+        // Pencil Durability decreases by -1 when writing lowercase letter.
         [TestMethod]
         public void PencilDegradationByOne()
         {
@@ -58,10 +70,10 @@ namespace PencilDurabilityKataTests
 
             writer.ProcessInput(currentInput);
 
-            Assert.AreEqual(966, writer.items.writersPencil.getDurability());
+            Assert.AreEqual(966, writer.items.writersPencil.GetDurability());
         }
 
-        // Pencil Durability decreases by 0 for space or newline.
+        // Pencil Durability decreases by 0 when writing space or newline.
         [TestMethod]
         public void PencilDegradationByZero()
         {
@@ -70,7 +82,7 @@ namespace PencilDurabilityKataTests
 
             writer.ProcessInput(currentInput);
 
-            Assert.AreEqual(983, writer.items.writersPencil.getDurability());
+            Assert.AreEqual(983, writer.items.writersPencil.GetDurability());
         }
     }
 }
