@@ -6,11 +6,13 @@ namespace PencilDurabilityKataProject
 
     public class WriterActions
     {
-        public WriterTools items; // Writer's pencil, paper
+        public Pencil pencil;
+        public List<char> paper;
 
         public WriterActions()
         {
-            items = new WriterTools();
+            paper = new List<char>();
+            pencil = new Pencil(1000, 2000, 20);
         }
 
         // Add characters or words to paper
@@ -18,14 +20,14 @@ namespace PencilDurabilityKataProject
         {
             foreach (char character in words)
             {
-                if (items.writersPencil.GetCurrentDurability() > 0)
+                if (pencil.GetCurrentDurability() > 0)
                 {
-                    items.paper.Add(character);
-                    items.writersPencil.UpdatePencilDurability(character);
+                    paper.Add(character);
+                    pencil.DecreasePencilDurability(character);
                 }
                 else
                 {
-                    items.paper.Add(' ');
+                   paper.Add(' ');
                 }
                 
             }
@@ -34,8 +36,8 @@ namespace PencilDurabilityKataProject
         // Sharpen Pencil back to full durability.
         public void SharpenPencil()
         {
-            items.writersPencil.SetDurability(items.writersPencil.GetInitialDurability());
-            items.writersPencil.DecreaseLength();
+            pencil.SetDurability(pencil.GetInitialDurability());
+            pencil.DecreaseLength();
         }
 
         // Writer erases
@@ -43,32 +45,23 @@ namespace PencilDurabilityKataProject
         {
             int matchIndex = -1;
             int textLength = eraseText.Length;
-            string paper = string.Join(null, items.paper.ToArray());
+            string currentPaper = string.Join(null, paper.ToArray());
 
-            matchIndex = paper.LastIndexOf(eraseText);
+            matchIndex = currentPaper.LastIndexOf(eraseText);
             if (matchIndex != -1)
             {
-                for (int i = matchIndex; i < matchIndex + textLength; ++i)
+                for (int i = matchIndex + (textLength -1); i >= matchIndex; --i)
                 {
-                    items.paper[i] = ' ';
+                    if (pencil.GetCurrentEraserDurability() > 0)
+                    {
+                        paper[i] = ' ';
+                        pencil.DecreaseEraserDurability(1);
+                    }
                 }
-                items.writersPencil.DecreaseEraserDurability(textLength);
             }
         }
     }
   
-    public class WriterTools
-    {
-        public List<char> paper;
-        public Pencil writersPencil;
-
-        public WriterTools()
-        {
-            paper = new List<char>();
-            writersPencil = new Pencil(1000, 2000, 20);
-        }
-    }
-
     public class Pencil
     {
         int initialDurability;
@@ -92,7 +85,6 @@ namespace PencilDurabilityKataProject
             return initialDurability;
         }
 
-
         public int GetCurrentDurability()
         {
             return currentDurability;
@@ -104,12 +96,12 @@ namespace PencilDurabilityKataProject
             currentDurability = durability;
         }
 
-        public int getLength()
+        public int GetLength()
         {
             return length;
         }
 
-        public void setLength(int l)
+        public void SetLength(int l)
         {
             length = l;
         }
@@ -135,7 +127,7 @@ namespace PencilDurabilityKataProject
         }
 
         // Computes point durability based off given point degrading values.
-        public void UpdatePencilDurability(char currentCharacter)
+        public void DecreasePencilDurability(char currentCharacter)
         {
             if (Char.IsUpper(currentCharacter))
             {

@@ -17,7 +17,7 @@ namespace PencilDurabilityKataTests
             string currentInput = "How";
             writer.ProcessInput(currentInput);
 
-            Assert.AreEqual(currentInput, string.Join(null, writer.items.paper.ToArray()));
+            Assert.AreEqual(currentInput, string.Join(null, writer.paper.ToArray()));
         }
 
         // Two writes to paper test.
@@ -32,7 +32,7 @@ namespace PencilDurabilityKataTests
             currentInput = " much wood would a woodchuck chuck if a woodchuck could chuck wood?";
             writer.ProcessInput(currentInput);
 
-            Assert.AreEqual(expectedOutput, string.Join(null, writer.items.paper.ToArray()));
+            Assert.AreEqual(expectedOutput, string.Join(null, writer.paper.ToArray()));
         }
 
         //Pencil prints white space when writing with a dull pencil.
@@ -43,10 +43,10 @@ namespace PencilDurabilityKataTests
             string currentInput = "How much wood would";
             string expectedOutput = "How much wood w    ";
 
-            writer.items.writersPencil.SetDurability(13);
+            writer.pencil.SetDurability(13);
             writer.ProcessInput(currentInput);
 
-            Assert.AreEqual(expectedOutput, String.Join(null, writer.items.paper.ToArray()));
+            Assert.AreEqual(expectedOutput, String.Join(null, writer.paper.ToArray()));
         }
 
         // Pencil Durability decreases by -2 when writing capital letter.
@@ -58,7 +58,7 @@ namespace PencilDurabilityKataTests
 
             writer.ProcessInput(currentInput);
 
-            Assert.AreEqual(982, writer.items.writersPencil.GetCurrentDurability());
+            Assert.AreEqual(982, writer.pencil.GetCurrentDurability());
         }
 
         // Pencil Durability decreases by -1 when writing lowercase letter.
@@ -70,7 +70,7 @@ namespace PencilDurabilityKataTests
 
             writer.ProcessInput(currentInput);
 
-            Assert.AreEqual(966, writer.items.writersPencil.GetCurrentDurability());
+            Assert.AreEqual(966, writer.pencil.GetCurrentDurability());
         }
 
         // Pencil Durability decreases by 0 when writing space or newline.
@@ -82,7 +82,7 @@ namespace PencilDurabilityKataTests
 
             writer.ProcessInput(currentInput);
 
-            Assert.AreEqual(983, writer.items.writersPencil.GetCurrentDurability());
+            Assert.AreEqual(983, writer.pencil.GetCurrentDurability());
         }
 
         // Writes spaces when pencil length is zero.
@@ -91,12 +91,12 @@ namespace PencilDurabilityKataTests
         {
             WriterActions writer = new WriterActions();
 
-            writer.items.writersPencil.setLength(1);
-            writer.items.writersPencil.SetDurability(0);
+            writer.pencil.SetLength(1);
+            writer.pencil.SetDurability(0);
             writer.SharpenPencil();
             writer.ProcessInput("Hello world");
 
-            Assert.AreEqual("           ", string.Join(null, writer.items.paper.ToArray()));
+            Assert.AreEqual("           ", string.Join(null, writer.paper.ToArray()));
 
         }
 
@@ -109,10 +109,10 @@ namespace PencilDurabilityKataTests
             writer.ProcessInput("Hello world");
             writer.SharpenPencil();
 
-            Assert.AreEqual(1000, writer.items.writersPencil.GetCurrentDurability());
+            Assert.AreEqual(1000, writer.pencil.GetCurrentDurability());
         }
 
-        // Pencil Length Value Decreases after SharpenPencil
+        // Pencil Length Value Decreases after SharpenPencil.
         [TestMethod]
         public void PencilLengthUpdated()
         {
@@ -121,18 +121,19 @@ namespace PencilDurabilityKataTests
             writer.ProcessInput("Hello world");
             writer.SharpenPencil();
 
-            Assert.AreEqual(19, writer.items.writersPencil.getLength());
+            Assert.AreEqual(19, writer.pencil.GetLength());
         }
 
-        // Erases the last occurance of text
+        // Erases the last occurance of text.
         [TestMethod]
         public void EraseLastOccuranceOfText()
         {
             WriterActions writer = new WriterActions();
+
             writer.ProcessInput("how much wood would.");
             writer.Erase("much wood would.");
 
-            Assert.AreEqual("how                 ", string.Join(null, writer.items.paper.ToArray()));
+            Assert.AreEqual("how                 ", string.Join(null, writer.paper.ToArray()));
         }
 
        // Erases text in middle of page.
@@ -140,32 +141,73 @@ namespace PencilDurabilityKataTests
        public void EraseTextInMiddlePage()
         {
             WriterActions writer = new WriterActions();
+
             writer.ProcessInput("how much wood would.");
             writer.Erase("much w");
 
-            Assert.AreEqual("how       ood would.", string.Join(null, writer.items.paper.ToArray()));
+            Assert.AreEqual("how       ood would.", string.Join(null, writer.paper.ToArray()));
         }
 
-        // Erases no text
+        // Erases the empty string.
         [TestMethod]
         public void EraseNoText()
         {
             WriterActions writer = new WriterActions();
+
             writer.ProcessInput("how much wood would.");
             writer.Erase("");
 
-            Assert.AreEqual(2000, writer.items.writersPencil.GetCurrentEraserDurability());
+            Assert.AreEqual("how much wood would.", string.Join(null, writer.paper.ToArray()));
 
         }
-        // Eraser Durability Decreases
+        // Eraser durability decreases.
         [TestMethod]
         public void EraserDegrades()
         {
             WriterActions writer = new WriterActions();
+
             writer.ProcessInput("how much wood would.");
             writer.Erase("much w");
 
-            Assert.AreEqual(1994, writer.items.writersPencil.GetCurrentEraserDurability());
+            Assert.AreEqual(1994, writer.pencil.GetCurrentEraserDurability());
+        }
+
+        // Eraser durability when writer erases the empty string.
+        [TestMethod]
+        public void EraserDurabilityWhenEmptyStringErased()
+        {
+            WriterActions writer = new WriterActions();
+
+            writer.ProcessInput("how much wood would.");
+            writer.Erase("");
+
+            Assert.AreEqual(2000, writer.pencil.GetCurrentEraserDurability());
+        }
+
+        // Attempts Erase when eraser durability is zero.
+        [TestMethod]
+        public void EraseWhenEraserDurabilityZero()
+        {
+            WriterActions writer = new WriterActions();
+
+            writer.ProcessInput("how much wood would.");
+            writer.pencil.DecreaseEraserDurability(2000); // Degrade erase to zero
+            writer.Erase("how ");
+
+            Assert.AreEqual("how much wood would.", string.Join(null, writer.paper.ToArray()));
+        }
+
+        // Eraser fully degrades while erasing.
+        [TestMethod]
+        public void EraserDegradesWhileErasing()
+        {
+            WriterActions writer = new WriterActions();
+
+            writer.ProcessInput("how much wood would.");
+            writer.pencil.DecreaseEraserDurability(1995); // Degrade erase to zero
+            writer.Erase("how mu");
+
+            Assert.AreEqual("h     ch wood would.", string.Join(null, writer.paper.ToArray()));
         }
     }
 }
