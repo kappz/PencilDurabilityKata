@@ -87,6 +87,11 @@ namespace PencilDurabilityKataProject
             return length;
         }
 
+        public void setLength(int l)
+        {
+            length = l;
+        }
+
         public void DecreaseLength()
         {
             --length;

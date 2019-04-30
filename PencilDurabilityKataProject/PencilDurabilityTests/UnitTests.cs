@@ -85,6 +85,21 @@ namespace PencilDurabilityKataTests
             Assert.AreEqual(983, writer.items.writersPencil.GetCurrentDurability());
         }
 
+        // Writes spaces when pencil length is zero.
+        [TestMethod]
+        public void SpacesWhenLengthIsZero()
+        {
+            WriterActions writer = new WriterActions();
+
+            writer.items.writersPencil.setLength(1);
+            writer.items.writersPencil.SetDurability(0);
+            writer.SharpenPencil();
+            writer.ProcessInput("Hello world");
+
+            Assert.AreEqual("           ", string.Join(null, writer.items.paper.ToArray()));
+
+        }
+
         // Writer sharpens pencil
         [TestMethod]
         public void WriterSharpensPencil()
