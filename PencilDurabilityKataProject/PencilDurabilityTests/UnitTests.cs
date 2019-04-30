@@ -96,5 +96,17 @@ namespace PencilDurabilityKataTests
 
             Assert.AreEqual(1000, writer.items.writersPencil.GetCurrentDurability());
         }
+
+        // Pencil Length Value Decreases after SharpenPencil
+        [TestMethod]
+        public void PencilLengthUpdated()
+        {
+            WriterActions writer = new WriterActions();
+
+            writer.ProcessInput("Hello world");
+            writer.SharpenPencil();
+
+            Assert.AreEqual(19, writer.items.writersPencil.getLength());
+        }
     }
 }

@@ -35,6 +35,7 @@ namespace PencilDurabilityKataProject
         public void SharpenPencil()
         {
             items.writersPencil.SetDurability(items.writersPencil.GetInitialDurability());
+            items.writersPencil.DecreaseLength();
         }
     }
   
@@ -46,7 +47,7 @@ namespace PencilDurabilityKataProject
         public WriterTools()
         {
             paper = new List<char>();
-            writersPencil = new Pencil(1000);
+            writersPencil = new Pencil(1000, 20);
         }
     }
 
@@ -54,10 +55,12 @@ namespace PencilDurabilityKataProject
     {
         int initialDurability;
         int currentDurability;
+        int length;
         string charactersToWrite;
 
-        public Pencil(int durability)
+        public Pencil(int durability, int l)
         {
+            length = l;
             initialDurability = durability;
             currentDurability = initialDurability;
             charactersToWrite = "";
@@ -77,6 +80,16 @@ namespace PencilDurabilityKataProject
         {
             initialDurability = durability;
             currentDurability = durability;
+        }
+
+        public int getLength()
+        {
+            return length;
+        }
+
+        public void DecreaseLength()
+        {
+            --length;
         }
 
         // Computes point durability based off given point degrading values.
