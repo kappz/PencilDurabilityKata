@@ -123,5 +123,16 @@ namespace PencilDurabilityKataTests
 
             Assert.AreEqual(19, writer.items.writersPencil.getLength());
         }
+
+        // Erases the last occurance of text
+        [TestMethod]
+        public void EraseslastOccuranceOfText()
+        {
+            WriterActions writer = new WriterActions();
+            writer.ProcessInput("how much wood would.");
+            writer.Erase("much wood would.");
+
+            Assert.AreEqual("how                 ", string.Join(null, writer.items.paper.ToArray()));
+        }
     }
 }

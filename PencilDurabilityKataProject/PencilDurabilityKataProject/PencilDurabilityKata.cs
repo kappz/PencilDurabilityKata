@@ -31,11 +31,25 @@ namespace PencilDurabilityKataProject
             }
         }
 
-        //Sharpen Pencil back to full durability.
+        // Sharpen Pencil back to full durability.
         public void SharpenPencil()
         {
             items.writersPencil.SetDurability(items.writersPencil.GetInitialDurability());
             items.writersPencil.DecreaseLength();
+        }
+
+        // Writer erases
+        public void Erase(string eraseText)
+        {
+            int matchIndex = -1;
+            int textLength = eraseText.Length;
+            string paper = string.Join(null, items.paper.ToArray());
+
+            matchIndex = paper.LastIndexOf(eraseText);
+            for (int i = matchIndex; i <  matchIndex + textLength; ++i)
+            {
+                items.paper[i] = ' ';
+            }
         }
     }
   
