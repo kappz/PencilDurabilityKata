@@ -126,13 +126,24 @@ namespace PencilDurabilityKataTests
 
         // Erases the last occurance of text
         [TestMethod]
-        public void EraseslastOccuranceOfText()
+        public void EraseLastOccuranceOfText()
         {
             WriterActions writer = new WriterActions();
             writer.ProcessInput("how much wood would.");
             writer.Erase("much wood would.");
 
             Assert.AreEqual("how                 ", string.Join(null, writer.items.paper.ToArray()));
+        }
+
+       // Erases text in middle of page.
+       [TestMethod]
+       public void EraseTextInMiddlePage()
+        {
+            WriterActions writer = new WriterActions();
+            writer.ProcessInput("how much wood would.");
+            writer.Erase("much w");
+
+            Assert.AreEqual("how       ood would.", string.Join(null, writer.items.paper.ToArray()));
         }
     }
 }

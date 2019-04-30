@@ -70,14 +70,13 @@ namespace PencilDurabilityKataProject
         int initialDurability;
         int currentDurability;
         int length;
-        string charactersToWrite;
+
 
         public Pencil(int durability, int l)
         {
             length = l;
             initialDurability = durability;
             currentDurability = initialDurability;
-            charactersToWrite = "";
         }
 
         public int GetCurrentDurability()
