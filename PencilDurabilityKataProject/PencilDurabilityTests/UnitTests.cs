@@ -191,7 +191,7 @@ namespace PencilDurabilityKataTests
             WriterActions writer = new WriterActions();
 
             writer.ProcessInput("how much wood would.");
-            writer.pencil.DecreaseEraserDurability(2000); // Degrade erase to zero
+            writer.pencil.DecreaseEraserDurability(2000); // Degrade eraser to zero.
             writer.Erase("how ");
 
             Assert.AreEqual("how much wood would.", string.Join(null, writer.paper.ToArray()));
@@ -203,11 +203,34 @@ namespace PencilDurabilityKataTests
         {
             WriterActions writer = new WriterActions();
 
-            writer.ProcessInput("how much wood would.");
-            writer.pencil.DecreaseEraserDurability(1995); // Degrade erase to zero
-            writer.Erase("how mu");
+            writer.ProcessInput("Buffalo Bill");
+            writer.pencil.DecreaseEraserDurability(1997); // Degrade eraser to three.
+            writer.Erase("Bill");
 
-            Assert.AreEqual("h     ch wood would.", string.Join(null, writer.paper.ToArray()));
+            Assert.AreEqual("Buffalo B   ", string.Join(null, writer.paper.ToArray()));
+        }
+
+        // Writer edits a word
+        [TestMethod]
+        public void EditWord()
+        {
+            WriterActions writer = new WriterActions();
+
+            writer.ProcessInput("An       a day keeps the doctor away");
+            writer.Edit("onion");
+
+            Assert.AreEqual("An onion a day keeps the doctor away", string.Join(null, writer.paper.ToArray()));
+        }
+
+        // Character collision while editing.
+        [TestMethod]
+        public void CharacterCollision()
+        {
+            WriterActions writer = new WriterActions();
+            writer.ProcessInput("An       a day keeps the doctor away");
+            writer.Edit("artichoke");
+
+            Assert.AreEqual("An artich@k@ay keeps the doctor away", string.Join(null, writer.paper.ToArray()));
         }
     }
 }

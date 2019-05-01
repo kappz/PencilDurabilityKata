@@ -22,8 +22,15 @@ namespace PencilDurabilityKataProject
             {
                 if (pencil.GetCurrentDurability() > 0)
                 {
-                    paper.Add(character);
-                    pencil.DecreasePencilDurability(character);
+                    if (character == ' ')
+                    {
+                        paper.Add(' ');
+                    }
+                    else
+                    {
+                        paper.Add(character);
+                        pencil.DecreasePencilDurability(character);
+                    }
                 }
                 else
                 {
@@ -59,6 +66,75 @@ namespace PencilDurabilityKataProject
                     }
                 }
             }
+        }
+
+        // Writer edits.
+        public void Edit(string editText)
+        {
+            int matchIndex = -1;
+            int textLength = editText.Length;
+            string currentPaper = string.Join(null, paper.ToArray());
+
+            matchIndex = FindEditIndex(currentPaper);
+            if (matchIndex != -1)
+            {
+                for (int i = 0; i < textLength; ++i)
+                {
+                    if (pencil.GetCurrentDurability() > 0)
+                    {
+                        if (matchIndex < paper.Count)
+                        {
+                            if (paper[matchIndex] == ' ')
+                            {
+                                paper[matchIndex] = editText[i];
+                                pencil.DecreasePencilDurability(editText[i]);
+                                ++matchIndex;
+                            }
+                            else
+                            {
+                                paper[matchIndex] = '@';
+                                ++matchIndex;
+                            }
+                        }
+                        else
+                        {
+                            paper.Add(editText[i]);
+                            pencil.DecreasePencilDurability(editText[i]);
+                        }
+                    }
+                }
+            }
+        }
+
+        public int FindEditIndex(string editText)
+        {
+            int index = -1;
+            int currentIndex = editText.Length - 1;
+            int count = 0;
+            
+            while (count <= 1 && currentIndex >= 0)
+            {
+                if (editText[currentIndex] == ' ')
+                {
+                    ++count;
+                }
+                else
+                {
+                    count = 0;
+                }
+                --currentIndex;
+            }
+
+            if (count > 1)
+            {
+                while (editText[currentIndex] == ' ')
+                {
+                    --currentIndex;
+                }
+                currentIndex += 2;
+            }
+            index = currentIndex;
+            return index;
         }
     }
   
